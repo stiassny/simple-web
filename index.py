@@ -39,16 +39,15 @@ class HandlerClass(SimpleHTTPRequestHandler):
             del request[addr_pair]
             request[addr_pair]=[num,ts]
         file=open("index.html", "w")
-        file.write("");
         for pair in request:
             if pair[0] == host:
                 guest = "LOCAL: "+pair[0]
             else:
                 guest = pair[0]
             if (time_now-datetime.strptime(request[pair][1],'%Y-%m-%d %H:%M:%S')).seconds < 3:
-                file.write(pair[1])
+                file.write("<p style=\"font-size:150%\" >#"+ str(request[pair][1]) +": <font color=\"red\">"+str(request[pair][0])+ "</font> requests " + "from &lt<font color=\"blue\">"+guest+"</font>&gt to WebServer &lt<font color=\"blue\">"+pair[1]+"</font>&gt</p>")
             else:
-                file.write("")
+                file.write("<p style=\"font-size:150%\" >#"+ str(request[pair][1]) +": <font color=\"maroon\">"+str(request[pair][0])+ "</font> requests " + "from &lt<font color=\"navy\">"+guest+"</font>&gt to WebServer &lt<font color=\"navy\">"+pair[1]+"</font>&gt</p>")
         file.write("</body> </html>");
         file.close()
         pickle.dump(request,open("pickle_data.txt","w"))
