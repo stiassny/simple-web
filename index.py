@@ -30,20 +30,7 @@ class HandlerClass(SimpleHTTPRequestHandler):
         time_now = datetime.now()
         ts = time_now.strftime('%Y-%m-%d %H:%M:%S')
         server = self.get_ip_address('eth0')
-        host=self.address_string()
-        addr_pair = (host,server)
-        if addr_pair not in request:
-            request[addr_pair]=[1,ts]
-        else:
-            num = request[addr_pair][0]+1
-            del request[addr_pair]
-            request[addr_pair]=[num,ts]
-        file=open("index.html", "w")
-        for pair in request:
-            if pair[0] == host:
-                guest = "LOCAL: "+pair[0]
-            else:
-                guest = pair[0]
+        file.write(server)
         file.close()
         pickle.dump(request,open("pickle_data.txt","w"))
 
@@ -60,4 +47,3 @@ if __name__ == '__main__':
         httpd.serve_forever()
     except:
         exit()
-
