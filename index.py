@@ -45,9 +45,9 @@ class HandlerClass(SimpleHTTPRequestHandler):
             else:
                 guest = pair[0]
             if (time_now-datetime.strptime(request[pair][1],'%Y-%m-%d %H:%M:%S')).seconds < 3:
-                file.write(pair[1])
+                #file.write(pair[1])
             else:
-                file.write(pair[1])
+                #file.write(pair[1])
         file.close()
         pickle.dump(request,open("pickle_data.txt","w"))
 
