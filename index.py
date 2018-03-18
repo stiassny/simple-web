@@ -12,6 +12,18 @@ import pickle
 from datetime import datetime
 from collections import OrderedDict
 
+def get_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        # doesn't even have to be reachable
+        s.connect(('10.255.255.255', 1))
+        IP = s.getsockname()[0]
+    except:
+        IP = '127.0.0.1'
+    finally:
+        s.close()
+    return IP
+
 class HandlerClass(SimpleHTTPRequestHandler):
     def get_ip_address(self,ifname):
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -39,17 +51,7 @@ class HandlerClass(SimpleHTTPRequestHandler):
             del request[addr_pair]
             request[addr_pair]=[num,ts]
         file=open("index.html", "w")
-        for pair in request:
-            if pair[0] == host:
-                guest = "LOCAL: "+pair[0]
-            else:
-                guest = pair[0]
-            if (time_now-datetime.strptime(request[pair][1],'%Y-%m-%d %H:%M:%S')).seconds < 3:
-                file.write("Server address: "+pair[1])
-                break
-            else:
-                file.write("Server address: "+pair[1])
-                break
+        file.write("Server IP: "+get_ip())
         file.close()
         pickle.dump(request,open("pickle_data.txt","w"))
 
